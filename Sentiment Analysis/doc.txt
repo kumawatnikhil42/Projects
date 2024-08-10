@@ -1,0 +1,22 @@
+Consulting Agreement
+
+This Consulting Agreement ("Agreement") is entered into by and between XYZ Consulting LLC ("Consultant") and ABC Corporation ("Client") as of [Effective Date].
+
+1. Services
+   Consultant agrees to provide consulting services to Client in the field of marketing strategy. These services include but are not limited to market research, competitor analysis, and marketing campaign development.
+
+2. Compensation
+   Client agrees to pay Consultant a fee of $X for each hour of consulting services provided. Payment shall be made within 30 days of receipt of invoice.
+
+3. Term and Termination
+   This Agreement shall commence on the Effective Date and shall continue for a period of 12 months. Either party may terminate this Agreement with 30 days' written notice.
+
+4. Confidentiality
+   Consultant agrees to keep all information provided by Client confidential and not to disclose it to any third party.
+
+5. Governing Law
+   This Agreement shall be governed by and construed in accordance with the laws of the State of California.
+
+IN WITNESS WHEREOF, the parties hereto have executed this Agreement as of the Effective Date.
+
+[Signature lines for Consultant and Client]
