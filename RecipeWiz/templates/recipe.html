@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}Recipe for {{ dish_name }}{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        background-color: #343a40; /* Dark background for contrast */
+        font-family: 'Arial', sans-serif; /* Font for better readability */
+        margin: 0;
+        padding: 0;
+        color: white; /* Set default text color to white */
+    }
+    .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px;
+    }
+    h2, h4 {
+        color: #f8f9fa; /* Light color for headings */
+     
+    }
+    h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+    h4 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+    .recipe-steps, .category {
+        /*background-color: #495057;*/ /* Darker card background */
+        border-radius: 8px;
+        padding: 15px;
+        margin: 30px 0; /* Increased margin for better spacing */
+        transition: transform 0.3s, box-shadow 0.3s;
+        /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); */
+    }
+    .recipe-steps:hover,.category:hover {
+        transform: translateY(-5px);
+        /*box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);*/
+    }
+    .ktc {
+        list-style-type: none; /* No bullets or dots */
+        padding-left: 15; /* Remove left padding */
+        color: white; /* Text color for list items */
+    }
+    li {
+        margin-bottom: 10px; /* Spacing between list items */
+    }
+    .ctc {
+        display: block; /* Change to block for centering */
+        margin: 20px auto; /* Centered margin */
+        padding: 10px 15px;
+        width: 250px; /* Set fixed width for the button */
+        background-color: #007bff; /* Button background color */
+        color: white; /* Button text color */
+        text-decoration: none; /* Remove underline */
+        border-radius: 5px; /* Rounded corners */
+        text-align: center; /* Center text within the button */
+        transition: background-color 0.3s, transform 0.2s; /* Add transition effects */
+    }
+    .ctc:hover {
+        background-color: #0056b3; /* Darker shade on hover */
+        transform: scale(1.05); /* Slightly scale up the button on hover */
+    }
+    ol {
+        list-style-type: none; /* No bullets or dots */
+        padding-left: 20; /* Remove left padding */
+        color: white; /* Text color for list items */
+    }
+
+    .tct{
+        text-align: center; /* Centered heading */
+    }
+    .ptc{
+        color:white;
+        padding-left: 20;
+    }
+    .rtc{
+        /*list-style-type: square;*/
+        padding-left: 20;
+        color: white;
+    }
+    .rtc2{
+        /*list-style-type: circle;*/
+        padding-left: 20;
+        color: white;
+    }
+    
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if dietary_preferences and dietary_restrictions %}
+    <h2 class="tct">Recipe for {{ dish_name }} <br>
+        <small>with dietary preferences: <strong>{{ dietary_preferences }}</strong></small> <br>
+        <small>and dietary restrictions: <strong>{{ dietary_restrictions }}</strong></small>
+    </h2>
+    {% else %}
+        <h2 class="tct">Recipe for {{ dish_name }}</h2>
+    {% endif %}
+    
+    <div class="category">
+        <h4>Yields:</h4>
+        <p class="ptc">{{ sections.yields }}</p>
+    </div>
+    <div class="category">
+        <h4>Prepration Time:</h4>
+        <p class="ptc">{{ sections.prep_time }}</p>
+    </div>
+    <div class="category">
+        <h4>Cooking Time:</h4>
+        <p class="ptc">{{ sections.cook_time }}</p>
+    </div>
+    
+    <div class="recipe-steps">
+        <h4>Ingredients:</h4>
+        <ul class='ktc'>
+            {% for ingredient in sections.ingredients %}
+                {% if ingredient.strip() != '' %}
+                    <li>{{ ingredient }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="recipe-steps">
+        <h4>Equipments:</h4>
+        <ul class="rtc2">
+            {% for item in sections.equipment %}
+                {% if item.strip() != '' %}
+                    <li>{{ item }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="recipe-steps">
+        <h4>Instructions:</h4>
+        <ol class='ktc'>
+            {% for instruction in sections.instructions %}
+                {% if instruction.strip() != '' %}
+                    <li>{{ instruction }}</li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+    </div>
+    
+    <div class="recipe-steps">
+        <h4>Tips:</h4>
+        <ul class="rtc">
+            {% for tip in sections.tips %}
+                {% if tip.strip() != '' %}
+                    <li>{{ tip }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <a href="{{ url_for('recommendations') }}" class="ctc" aria-label="Back to recommendations page">Back to Recommendations</a>
+</div>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile of {{ user.full_name }}{% endblock %}
+
+{% block style%} 
+body {
+    background-color: #f8f9fa; /* Light gray background */
+    font-family: Arial, sans-serif; /* Font family */
+}
+
+/* Centered title */
+h1 {
+    margin-bottom: 30px; /* Space below the title */
+    color: white; /* Dark text color */
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: #0A6522; /* Primary button color */
+    border: none; /* Remove border */
+    transition: background-color 0.3s ease; /* Transition for hover effect */
+}
+
+.btn-primary:hover {
+    background-color: #043927; /* Darker blue on hover */
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Danger button color */
+    border: none; /* Remove border */
+    transition: background-color 0.3s ease; /* Transition for hover effect */
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+/* Table styling */
+.table {
+    background-color: white; /* White background for the table */
+    border-radius: 5px; /* Rounded corners */
+    overflow: hidden; /* Hide overflow */
+}
+
+.table th {
+    background-color: #007bff; /* Header color */
+    color: white; /* White text */
+}
+
+.table td {
+    color: #343a40; /* Dark text */
+}
+
+/* Modal styling */
+.modal-content {
+    border-radius: 5px; /* Rounded corners for modal */
+}
+
+.modal-header {
+    background-color: #007bff; /* Modal header color */
+    color: white; /* White text in header */
+}
+
+.modal-body {
+    padding: 20px; /* Padding in the modal body */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 24px; /* Smaller title size on mobile */
+    }
+}
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Profile</h1>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">User Information</h5>
+            <p><strong>Full Name:</strong> {{ user.full_name }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            
+            <h5 class="card-title">Dietary Preferences</h5>
+            <form method="POST" action="{{ url_for('update_preferences') }}">
+                <div class="mb-3">
+                    <label for="dietary-preferences" class="form-label">Dietary Preferences</label>
+                    <select class="form-select" id="dietary-preferences" name="dietary_preferences">
+                        <option value="" disabled selected>Select your preference</option>
+                        <option value="Vegetarian">Vegetarian</option>
+                        <option value="Vegan">Vegan</option>
+                        <option value="Pescatarian">Pescatarian</option>
+                        <option value="Keto">Keto</option>
+                        <option value="Paleo">Paleo</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="dietary-restrictions" class="form-label">Dietary Restrictions</label>
+                    <select multiple class="form-select" id="dietary-restrictions" name="dietary_restrictions">
+                        <option value="Nuts">Nuts</option>
+                        <option value="Dairy">Dairy</option>
+                        <option value="Gluten">Gluten</option>
+                        <option value="Soy">Soy</option>
+                        <option value="Eggs">Eggs</option>
+                    </select>
+                    <div class="form-text">Hold down the Ctrl (Windows) or Command (Mac) button to select multiple options.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="favorite-cuisines" class="form-label">Favorite Cuisines</label>
+                    <select multiple class="form-select" id="favorite-cuisines" name="favorite_cuisines">
+                        <option value="Italian">Italian</option>
+                        <option value="Mexican">Mexican</option>
+                        <option value="Indian">Indian</option>
+                        <option value="Asian">Asian</option>
+                        <option value="Mediterranean">Mediterranean</option>
+                    </select>
+                    <div class="form-text">Hold down the Ctrl (Windows) or Command (Mac) button to select multiple options.</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Preferences</button>
+            </form>
+
+            {% if user.preferences %}
+                <h5 class="mt-4">Your Preferences</h5>
+                <p><strong>Dietary Preferences:</strong> {{ user.preferences.dietary_preferences }}</p>
+                <p><strong>Dietary Restrictions:</strong> {{ user.preferences.dietary_restrictions }}</p>
+                <p><strong>Favorite Cuisines:</strong> {{ user.preferences.favorite_cuisines }}</p>
+            {% else %}
+                <p>No preferences set.</p>
+            {% endif %}
+            
+            <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,198 @@
+<!-- templates/profile.html -->
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+{% block style %}
+/* Profile Page Styles */
+body {
+    background-color: #f7f9fc; /* Soft light background for the body */
+    font-family: 'Arial', sans-serif; /* Font style */
+}
+
+.container {
+    max-width: 900px; /* Limit the width of the container */
+    margin: 0 auto; /* Center the container */
+    padding: 40px; /* Add padding around the container */
+}
+
+.card {
+    background-color: #ffffff; /* Light background for the card */
+    border-radius: 15px; /* More rounded corners for the card */
+    overflow: hidden; /* Ensures child elements respect the border radius */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Softer shadow for depth */
+    margin-bottom: 30px; /* Spacing between cards */
+    transition: transform 0.3s, box-shadow 0.3s; /* Transition for hover effects */
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25); /* Enhanced shadow on hover */
+}
+
+.card-title {
+    border-bottom: 3px solid #007bff; /* Thicker blue border under titles */
+    padding-bottom: 15px; /* Padding below titles */
+    margin-bottom: 15px; /* Margin below titles */
+    font-weight: bold; /* Bold titles for emphasis */
+    font-size: 1.5rem; /* Larger font size for titles */
+}
+
+.form-label {
+    font-weight: bold; /* Bold labels */
+    color: #333; /* Darker color for labels */
+}
+
+.form-select, .form-check-input {
+    border-radius: 5px; /* Rounded corners for selects and checkboxes */
+    background-color: #f8f9fa; /* Slightly lighter background for inputs */
+}
+
+.form-select:focus, .form-check-input:focus {
+    border-color: #007bff; /* Blue border on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Light blue shadow on focus */
+}
+
+.btn {
+    border-radius: 8px; /* More rounded corners for buttons */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition for background color and scaling */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Primary button color */
+    border: none; /* Remove border */
+    color: white; /* White text for better contrast */
+    padding: 10px 20px; /* More padding for buttons */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slight scale effect on hover */
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* Secondary button color */
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268; /* Darker gray on hover */
+}
+
+.alert {
+    margin-top: 20px; /* Space above alert box */
+    border-radius: 5px; /* Rounded corners for alert */
+}
+
+.text-muted {
+    color: #6c757d; /* Muted text color */
+}
+
+.mt-4 {
+    margin-top: 2rem; /* Increased top margin for better spacing */
+}
+
+.mb-3 {
+    margin-bottom: 1.5rem; /* Increased bottom margin for better spacing */
+}
+
+.mb-4 {
+    margin-bottom: 2rem; /* Increased bottom margin for better spacing */
+}
+
+/* Responsive Styles */
+@media (max-width: 576px) {
+    .container {
+        padding: 20px; /* Reduce padding on smaller screens */
+    }
+
+    .card {
+        margin-bottom: 20px; /* Spacing between cards */
+    }
+}
+
+.card-text {
+    color: #495057; /* Dark text for card content */
+}
+
+.text-muted2 {
+    color: #007bff; /* Blue text for preferences */
+}
+
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center mt-4 mb-4 card-text">Profile</h1>
+<div class="container">
+    <div class="card shadow-sm border-light mb-4">
+        <div class="card-body">
+            <h5 class="card-title text-primary">User Information</h5>
+            <p class="card-text"><strong>Full Name:</strong> <span class="text-muted">{{ user.full_name }}</span></p>
+            <p class="card-text"><strong>Email:</strong> <span class="text-muted">{{ user.email }}</span></p>
+
+            <h5 class="card-title text-primary">Preferences</h5>
+            <form action="{{ url_for('update_preferences') }}" method="POST">
+                <div class="mb-3">
+                    <label for="dietary_preferences" class="form-label card-text">Dietary Preferences</label>
+                    <select name="dietary_preferences" id="dietary_preferences" class="form-select">
+                        <option value="" {% if user.preferences and user.preferences[0].dietary_preferences == '' %}selected{% endif %}>Select your preference</option>
+                        <option value="Vegetarian" {% if user.preferences and user.preferences[0].dietary_preferences == 'Vegetarian' %}selected{% endif %}>Vegetarian</option>
+                        <option value="Vegan" {% if user.preferences and user.preferences[0].dietary_preferences == 'Vegan' %}selected{% endif %}>Vegan</option>
+                        <option value="Non-Veg" {% if user.preferences and user.preferences[0].dietary_preferences == 'Non-Veg' %}selected{% endif %}>Non-Veg</option>
+                        <option value="Pescatarian" {% if user.preferences and user.preferences[0].dietary_preferences == 'Pescatarian' %}selected{% endif %}>Pescatarian</option>
+                        <option value="Keto" {% if user.preferences and user.preferences[0].dietary_preferences == 'Keto' %}selected{% endif %}>Keto</option>
+                        <option value="Paleo" {% if user.preferences and user.preferences[0].dietary_preferences == 'Paleo' %}selected{% endif %}>Paleo</option>
+                        <option value="Gluten Free" {% if user.preferences and user.preferences[0].dietary_preferences == 'Gluten Free' %}selected{% endif %}>Gluten Free</option>
+                        <option value="None" {% if user.preferences and user.preferences[0].dietary_preferences == 'None' %}selected{% endif %}>None</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label card-text">Dietary Restrictions</label><br>
+                    {% set restrictions = user.preferences[0].dietary_restrictions.split(', ') if user.preferences else [] %}
+                    <div class="form-check card-text">
+                        <input type="checkbox" name="dietary_restrictions" value="Nuts" id="allergies_nuts" class="form-check-input" 
+                            {% if 'Nuts' in restrictions %}checked{% endif %}>
+                        <label class="form-check-label" for="allergies_nuts">Nuts</label>
+                    </div>
+                    <div class="form-check card-text">
+                        <input type="checkbox" name="dietary_restrictions" value="Dairy" id="allergies_dairy" class="form-check-input" 
+                            {% if 'Dairy' in restrictions %}checked{% endif %}>
+                        <label class="form-check-label" for="allergies_dairy">Dairy</label>
+                    </div>
+                    <div class="form-check card-text">
+                        <input type="checkbox" name="dietary_restrictions" value="Gluten" id="allergies_gluten" class="form-check-input" 
+                            {% if 'Gluten' in restrictions %}checked{% endif %}>
+                        <label class="form-check-label" for="allergies_gluten">Gluten</label>
+                    </div>
+                    <div class="form-check card-text">
+                        <input type="checkbox" name="dietary_restrictions" value="Lactose" id="intolerances_lactose" class="form-check-input" 
+                            {% if 'Lactose' in restrictions %}checked{% endif %}>
+                        <label class="form-check-label" for="intolerances_lactose">Lactose Intolerance</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="favorite_cuisines" class="form-label card-text">Favorite Cuisines</label>
+                    <select name="favorite_cuisines" id="favorite_cuisines" class="form-select">
+                        <option value="" {% if user.preferences and user.preferences[0].favorite_cuisines == '' %}selected{% endif %}>Select your favorite cuisine</option>
+                        <option value="Italian" {% if user.preferences and user.preferences[0].favorite_cuisines == 'Italian' %}selected{% endif %}>Italian</option>
+                        <option value="Mexican" {% if user.preferences and user.preferences[0].favorite_cuisines == 'Mexican' %}selected{% endif %}>Mexican</option>
+                        <option value="Indian" {% if user.preferences and user.preferences[0].favorite_cuisines == 'Indian' %}selected{% endif %}>Indian</option>
+                        <option value="Asian" {% if user.preferences and user.preferences[0].favorite_cuisines == 'Asian' %}selected{% endif %}>Asian</option>
+                        <option value="Japanese" {% if user.preferences and user.preferences[0].favorite_cuisines == 'Japanese' %}selected{% endif %}>Japanese</option>
+                        <option value="French" {% if user.preferences and user.preferences[0].favorite_cuisines == 'French' %}selected{% endif %}>French</option>
+                        <option value="Spanish" {% if user.preferences and user.preferences[0].favorite_cuisines == 'Spanish' %}selected{% endif %}>Spanish</option>
+                        <option value="Mediterranean" {% if user.preferences and user.preferences[0].favorite_cuisines == 'Mediterranean' %}selected{% endif %}>Mediterranean</option>
+                        
+                        <option value="None" {% if user.preferences and user.preferences[0].favorite_cuisines == 'None' %}selected{% endif %}>None</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update Preferences</button>
+            </form>
+            {% if message %}
+                <div class="alert alert-success mt-3">{{ message }}</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

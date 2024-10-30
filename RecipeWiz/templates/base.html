@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" integrity="sha384-dpuaG1suU0eT09tx5plTaGMLBsfDLzUCCUXOY2j/LSvXYuG6Bqs43ALlhIqAJVRb" crossorigin="anonymous">
+
+    <title>RecipeWiz - {% block title %}{% endblock %}</title>
+</head>
+<style>
+  .bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1;
+    object-fit: cover;
+}
+
+/* Ensure content is above the video */
+body, .container-fluid {
+    position: relative;
+    z-index: 1;
+    background-color: transparent;
+}
+
+.navbar {
+  background-color: transparent !important;
+}
+
+.navbar .nav-link,
+.navbar .navbar-brand,
+.navbar .navbar-toggler-icon {
+  color: white !important;
+}
+
+{% block style %}
+{% endblock %}
+</style>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('home') }}">RecipeWiz</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Account
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% if session.get('user_id') %}
+                                <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>  <!-- Profile link -->
+                                {% if session.get('role') == 'superuser' %}
+                                    <li><a class="dropdown-item" href="{{ url_for('users') }}">Users</a></li>  <!-- Users link for superuser -->
+                                {% endif %}
+                                <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                            {% else %}
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#loginModal" href="#">Login</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Modal for Login -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="/login">
+                        <div class="mb-3">
+                            <label for="login-username-email" class="form-label">Username or Email</label>
+                            <input type="text" class="form-control" id="login-username-email" name="username_email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="login-password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="login-password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                        <div class="mt-3 text-center">
+                            <span>Don't have an account? </span>
+                            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Sign Up -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signupModalLabel">Sign Up</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="/signup">
+                        <div class="mb-3">
+                            <label for="signup-username" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="signup-username" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signup-email" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="signup-email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signup-password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="signup-password" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signup-confirm-password" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="signup-confirm-password" name="confirm_password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <video autoplay muted loop class="bg-video">
+        <source src="{{ url_for('static', filename='images/v1.mp4') }}" type="video/mp4">
+        <img src="{{ url_for('static', filename='images/fallback.jpg') }}" alt="Background Image" style="width: 100%; height: auto;">
+        Your browser does not support HTML5 video.
+    </video>
+
+    <!-- Content Placeholder -->
+    <div class="container mt-5 pt-5">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {% for message in messages %}
+                        {{ message }}<br>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
