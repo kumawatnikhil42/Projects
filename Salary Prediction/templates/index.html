@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Prediction</title>
+</head>
+<body>
+    <h1>Salary Prediction</h1>
+    <form method="POST">
+        <label for="education">Education:</label>
+        <input type="text" name="education" required><br><br>
+
+        <label for="location">Location:</label>
+        <input type="text" name="location" required><br><br>
+
+        <label for="job_title">Job Title:</label>
+        <input type="text" name="job_title" required><br><br>
+
+        <label for="gender">Gender:</label>
+        <input type="text" name="gender" required><br><br>
+
+        <label for="age">Age:</label>
+        <input type="number" step="any" name="age" required><br><br>
+
+        <label for="experience">Years of Experience:</label>
+        <input type="number" step="any" name="experience" required><br><br>
+
+        <button type="submit">Predict Salary</button>
+    </form>
+
+    {% if predicted_salary %}
+        <h2>Predicted Salary: ${{ predicted_salary }}</h2>
+    {% endif %}
+</body>
+</html>
