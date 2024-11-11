@@ -1,0 +1,10 @@
+Flask
+python-dotenv
+qrcode
+smtplib
+email
+Werkzeug
+opencv-python-headless
+gspread
+oauth2client
+Pillow  # Required by the `qrcode` library for image processing
