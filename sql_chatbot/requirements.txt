@@ -1,0 +1,9 @@
+langchain 
+langchain-community 
+google-generativeai 
+faiss-cpu 
+streamlit 
+pandas
+langchain-google-genai 
+mysql.connector
+sqlalchemy
